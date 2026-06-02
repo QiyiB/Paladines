@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init *)",
+      "Bash(mkdir -p server/src/routes server/src/middleware client/src/api client/src/context client/src/components client/src/pages client/public)"
+    ]
+  }
+}
