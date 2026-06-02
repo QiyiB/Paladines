@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { api } from "../api/client.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -26,7 +27,7 @@ export default function CambiarPassword({ onClose }) {
     }
   }
 
-  return (
+  return createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <form className="modal" onClick={(e) => e.stopPropagation()} onSubmit={guardar}>
         <h3>Cambiar contrasena</h3>
@@ -43,6 +44,7 @@ export default function CambiarPassword({ onClose }) {
           <button className="btn btn-primary">Guardar</button>
         </div>
       </form>
-    </div>
+    </div>,
+    document.body
   );
 }
