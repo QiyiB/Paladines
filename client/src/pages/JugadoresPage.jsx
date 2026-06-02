@@ -64,7 +64,7 @@ export default function JugadoresPage() {
                   {j.nombre} {j.apellido}
                 </span>
               </td>
-              <td>{j.edad} anios</td>
+              <td>{j.edad} años</td>
               <td>{j.en_mora ? <span className="badge badge-danger">En mora</span> : <span className="badge badge-ok">Al dia</span>}</td>
               <td className="row-actions">
                 <button className="btn btn-sm" onClick={() => setDetalleId(j.id)}>Ver / Editar</button>
@@ -329,7 +329,7 @@ function DetalleJugador({ id, onClose, onChanged }) {
             {!editando ? (
               <div className="detalle-grid">
                 <div><span className="muted">Documento</span><div>{jug.tipo_documento} {jug.numero_documento}</div></div>
-                <div><span className="muted">Edad</span><div>{jug.edad} anios</div></div>
+                <div><span className="muted">Edad</span><div>{jug.edad} años</div></div>
                 <div><span className="muted">Fecha nacimiento</span><div>{String(jug.fecha_nacimiento).slice(0, 10)}</div></div>
                 <div><span className="muted">Genero</span><div>{jug.genero || "—"}</div></div>
                 <div><span className="muted">EPS</span><div>{jug.eps || "—"}</div></div>

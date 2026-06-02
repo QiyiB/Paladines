@@ -215,12 +215,12 @@ function Constructor({ id, onClose }) {
                 <select defaultValue="" onChange={(e) => e.target.value && asignar(seleccion.id, Number(e.target.value))}>
                   <option value="" disabled>Selecciona...</option>
                   {elegibles.map((j) => (
-                    <option key={j.id} value={j.id}>{j.apellido} {j.nombre} · {j.edad} anios</option>
+                    <option key={j.id} value={j.id}>{j.apellido} {j.nombre} · {j.edad} años</option>
                   ))}
                 </select>
               </label>
               {elegibles.length === 0 && (
-                <p className="muted">No hay jugadores elegibles (deben estar en el rango de anios de la categoria y sin mora).</p>
+                <p className="muted">No hay jugadores elegibles (deben estar en el rango de años de la categoria y sin mora).</p>
               )}
               <button className="btn btn-ghost btn-sm" onClick={() => setSeleccion(null)}>Cerrar</button>
             </div>

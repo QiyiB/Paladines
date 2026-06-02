@@ -51,12 +51,12 @@ export default function CategoriasPage() {
           + Nueva categoria
         </button>
       </div>
-      <p className="muted">Cada categoria agrupa por rango de anio de nacimiento (pueden traslaparse).</p>
+      <p className="muted">Cada categoria agrupa por rango de año de nacimiento (pueden traslaparse).</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="table-wrap"><table className="data-table">
-        <thead><tr><th>Nombre</th><th>Rango de anios</th><th></th></tr></thead>
+        <thead><tr><th>Nombre</th><th>Rango de años</th><th></th></tr></thead>
         <tbody>
           {cargando && <tr><td colSpan={3} className="muted">Cargando...</td></tr>}
           {!cargando && categorias.length === 0 && <tr><td colSpan={3} className="muted">Sin categorias.</td></tr>}
@@ -84,11 +84,11 @@ export default function CategoriasPage() {
                 <input value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} required />
               </label>
               <label className="field">
-                <span>Anio min *</span>
+                <span>Año min *</span>
                 <input type="number" value={form.anio_min} onChange={(e) => setForm({ ...form, anio_min: e.target.value })} required />
               </label>
               <label className="field">
-                <span>Anio max *</span>
+                <span>Año max *</span>
                 <input type="number" value={form.anio_max} onChange={(e) => setForm({ ...form, anio_max: e.target.value })} required />
               </label>
             </div>

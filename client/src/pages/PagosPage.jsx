@@ -137,7 +137,7 @@ function FormularioPago({ onClose, onSaved }) {
               {resultados.map((j) => (
                 <div key={j.id} className="vinculo-row">
                   <strong>{j.apellido} {j.nombre}</strong>
-                  <span className="muted">{j.numero_documento} · {j.edad} anios</span>
+                  <span className="muted">{j.numero_documento} · {j.edad} años</span>
                   <button type="button" className="btn btn-sm btn-primary" onClick={() => { setJugador(j); setResultados([]); }}>Elegir</button>
                 </div>
               ))}
