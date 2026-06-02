@@ -251,10 +251,12 @@ h1, h2, h3, h4 { margin: 0 0 0.5rem; letter-spacing: -0.02em; text-wrap: balance
 
 /* ---------- Modal ---------- */
 .modal-overlay { position: fixed; inset: 0; background: rgba(14, 36, 64, 0.5);
-  display: grid; place-items: center; padding: 1rem; z-index: var(--z-modal);
+  display: flex; padding: 1rem; z-index: var(--z-modal); overflow-y: auto;
   backdrop-filter: blur(2px); animation: fade var(--t); }
+/* margin:auto centra el modal y, si es mas alto que la pantalla, deja que el
+   overlay haga scroll sin recortar la parte de arriba (evita el bug de centrado). */
 .modal { background: var(--card); border-radius: var(--radius-lg); padding: 1.6rem;
-  width: 480px; max-width: 100%; max-height: 90dvh; overflow: auto;
+  width: 480px; max-width: 100%; margin: auto;
   box-shadow: var(--shadow-lg); animation: pop 220ms cubic-bezier(0.2, 0.8, 0.3, 1); }
 .modal-lg { width: 660px; }
 @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(0.98); }
