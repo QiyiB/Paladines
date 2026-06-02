@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import { money } from "./ConceptosPage.jsx";
+import { generarReciboPDF } from "../lib/recibo.js";
 
 const METODOS = ["EFECTIVO", "TRANSFERENCIA", "TARJETA", "NEQUI", "DAVIPLATA", "PSE", "OTRO"];
 
@@ -70,7 +72,12 @@ export default function PagosPage() {
               <td>{p.fecha_expiracion ? String(p.fecha_expiracion).slice(0, 10) : "—"}</td>
               <td className="row-actions">
                 {p.anulado ? <span className="badge badge-danger">Anulado</span>
-                  : <button className="btn btn-sm btn-danger" onClick={() => anular(p)}>Anular</button>}
+                  : (
+                    <>
+                      <button className="btn btn-sm" onClick={() => generarReciboPDF(p)}>Recibo</button>
+                      <button className="btn btn-sm btn-danger" onClick={() => anular(p)}>Anular</button>
+                    </>
+                  )}
               </td>
             </tr>
           ))}
@@ -85,12 +92,14 @@ export default function PagosPage() {
 }
 
 function FormularioPago({ onClose, onSaved }) {
+  const { usuario } = useAuth();
   const [conceptos, setConceptos] = useState([]);
   const [buscar, setBuscar] = useState("");
   const [resultados, setResultados] = useState([]);
   const [jugador, setJugador] = useState(null);
   const [form, setForm] = useState({ concepto_id: "", metodo: "EFECTIVO", fecha_pago: "", monto: "" });
   const [error, setError] = useState("");
+  const [recibo, setRecibo] = useState(null);
 
   useEffect(() => { api("/conceptos").then((cs) => { setConceptos(cs); setForm((f) => ({ ...f, concepto_id: cs[0]?.id || "" })); }).catch(() => {}); }, []);
 
@@ -108,9 +117,39 @@ function FormularioPago({ onClose, onSaved }) {
     setError("");
     if (!jugador) { setError("Selecciona un jugador"); return; }
     try {
-      await api("/pagos", { method: "POST", body: { jugador_id: jugador.id, concepto_id: form.concepto_id, metodo: form.metodo, fecha_pago: form.fecha_pago || undefined, monto: form.monto || undefined } });
-      onSaved();
+      const pago = await api("/pagos", { method: "POST", body: { jugador_id: jugador.id, concepto_id: form.concepto_id, metodo: form.metodo, fecha_pago: form.fecha_pago || undefined, monto: form.monto || undefined } });
+      setRecibo({
+        id: pago.id,
+        fecha_pago: pago.fecha_pago,
+        fecha_expiracion: pago.fecha_expiracion,
+        monto: pago.monto,
+        metodo: form.metodo,
+        jugador_nombre: jugador.nombre,
+        jugador_apellido: jugador.apellido,
+        numero_documento: jugador.numero_documento,
+        concepto: conceptoSel?.nombre,
+        registrado_por: usuario?.nombre,
+      });
     } catch (err) { setError(err.message); }
+  }
+
+  if (recibo) {
+    return (
+      <div className="modal-overlay" onClick={onSaved}>
+        <div className="modal" onClick={(e) => e.stopPropagation()}>
+          <h3>Pago registrado ✓</h3>
+          <p className="muted">
+            Pago de <strong>{money(recibo.monto)}</strong> por <strong>{recibo.concepto}</strong> de{" "}
+            {recibo.jugador_nombre} {recibo.jugador_apellido}.
+          </p>
+          <p className="muted">¿Deseas descargar el recibo en PDF?</p>
+          <div className="modal-actions">
+            <button className="btn" onClick={onSaved}>Listo</button>
+            <button className="btn btn-primary" onClick={() => generarReciboPDF(recibo)}>Descargar recibo (PDF)</button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
