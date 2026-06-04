@@ -11,6 +11,11 @@ deudoresRouter.use(authRequired, requireRole("ADMIN"));
 // agrupado por jugador para mostrar "todo lo que debe".
 deudoresRouter.get("/", async (req, res, next) => {
   try {
+    // Pone al dia las deudas por vencimiento antes de listar (idempotente):
+    // asi un jugador vuelve a aparecer en mora apenas vence su pago, sin depender
+    // de esperar al job/cron diario.
+    await query("SELECT generar_deudas_por_vencimiento()");
+
     const { q, documento } = req.query;
     const where = [];
     const params = [];
